@@ -8,22 +8,52 @@ export default class Game {
   }
 
   init(opts) {
+    PIXI.utils.skipHello();
+
     let el = document.getElementById('ctx-container');
     let width = el.clientWidth;
     let height = el.clientHeight;
 
-    this.app = new PIXI.Application(width, height, {backgroundColor : 0x2f2f2f});
+    let app = new PIXI.Application(width, height, {backgroundColor : 0x2f2f2f});
+    app.stop();
 
     const rect = new PIXI.Graphics()
     .beginFill(0x00ff00)
     .drawRect(200, 200, 200, 200);
 
+    app.stage.addChild(rect);
+
+    // console.log(app.renderer.extract.pixels(rect));;;
+
+    PIXI.loader.add('shader', 'shaders/first.frag')
+    .load((loader, res) => {
+      let uniforms = {
+        time: {
+          type: 'f',
+          value: 0
+        },
+        mouse: {
+          type: 'v2',
+          value: { x: 0, y: 0 }
+        }
+      };
+
+      let shader = new PIXI.Filter(null, res.shader.data, uniforms);
+      rect.filters = [shader];
+      app.ticker.add((d) => {
+        shader.uniforms.time += 0.01;
+      });
+
+      app.start();
+    });
+
     // Add a blur filter
-    rect.filters = [new PIXI.filters.BlurFilter(10)];
+    // rect.filters = [new PIXI.filters.BlurFilter(10)];
 
     // Display rectangle
-    this.app.stage.addChild(rect);
+    
 
-    el.appendChild(this.app.view);
+    el.appendChild(app.view);
+    this.app = app;
   }
 }

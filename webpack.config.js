@@ -26,6 +26,10 @@ exports.default = {
       context: './src',
       from: '*.html',
       to: `${__dirname}/build`
+    },{
+      context: './src/game/shaders',
+      from: '*',
+      to: `${__dirname}/build/shaders`
     }])
   ]
 }
