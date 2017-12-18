@@ -20,6 +20,7 @@
     "webpack": "^3.8.1"
   },
   "dependencies": {
-    "pixi.js": "^4.6.1"
+    "pixi.js": "^4.6.1",
+    "raw-loader": "^0.5.1"
   }
 }

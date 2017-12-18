@@ -19,6 +19,11 @@ exports.default = {
       },{
         loader: 'css-loader'
       }]
+    },{
+      test: /\.(vert|frag)$/,
+      use: [{
+        loader: 'raw-loader'
+      }]
     }]
   },
   plugins: [
@@ -30,6 +35,10 @@ exports.default = {
       context: './src/game/shaders',
       from: '*',
       to: `${__dirname}/build/shaders`
+    },{
+      context: './assets',
+      from: '*',
+      to: `${__dirname}/build/assets`,
     }])
   ]
 }

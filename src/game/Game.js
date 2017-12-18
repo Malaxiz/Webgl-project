@@ -1,6 +1,5 @@
-import * as PIXI from 'pixi.js';
-
 import Entity from './Entity';
+import Renderer from './Renderer';
 
 export default class Game {
   constructor() {
@@ -8,52 +7,23 @@ export default class Game {
   }
 
   init(opts) {
-    PIXI.utils.skipHello();
+    let canvas = document.getElementById('ctx');
+    let gl = canvas.getContext('webgl');
+    //console.log(m4, webglUtils);
 
-    let el = document.getElementById('ctx-container');
-    let width = el.clientWidth;
-    let height = el.clientHeight;
+    let renderer = new Renderer(gl);
 
-    let app = new PIXI.Application(width, height, {backgroundColor : 0x2f2f2f});
-    app.stop();
-
-    const rect = new PIXI.Graphics()
-    .beginFill(0x00ff00)
-    .drawRect(200, 200, 200, 200);
-
-    app.stage.addChild(rect);
-
-    // console.log(app.renderer.extract.pixels(rect));;;
-
-    PIXI.loader.add('shader', 'shaders/first.frag')
-    .load((loader, res) => {
-      let uniforms = {
-        time: {
-          type: 'f',
-          value: 0
-        },
-        mouse: {
-          type: 'v2',
-          value: { x: 0, y: 0 }
-        }
-      };
-
-      let shader = new PIXI.Filter(null, res.shader.data, uniforms);
-      rect.filters = [shader];
-      app.ticker.add((d) => {
-        shader.uniforms.time += 0.01;
-      });
-
-      app.start();
-    });
-
-    // Add a blur filter
-    // rect.filters = [new PIXI.filters.BlurFilter(10)];
-
-    // Display rectangle
-    
-
-    el.appendChild(app.view);
-    this.app = app;
+    var then = 0;
+    function render(time) {
+      var now = time * 0.001;
+      var deltaTime = Math.min(0.1, now - then);
+      then = now;
+  
+      // update(deltaTime);
+      renderer.draw();
+  
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
   }
 }
