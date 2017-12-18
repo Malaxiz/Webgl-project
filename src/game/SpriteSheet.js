@@ -21,14 +21,14 @@ export default class SpriteSheet {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
     let textureInfo = {
-      width: 1,
-      height: 1,
+      w: 1,
+      h: 1,
       texture: tex,
     };
     let img = new Image();
     img.addEventListener('load', () => {
-      textureInfo.width = img.width;
-      textureInfo.height = img.height;
+      textureInfo.w = img.width;
+      textureInfo.h = img.height;
 
       gl.bindTexture(gl.TEXTURE_2D, textureInfo.texture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);

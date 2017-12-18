@@ -13,12 +13,17 @@ class aManager {
     this.drawProgram = undefined;
 
     this.scale = 4;
+    this.tileSize = 16;
+
+    this.programs = {};
 
     this.sheets = {};
     this.sprites = {};
 
     this.entityid = 1;
     this.entities = {};
+
+    this.tiles = {}; // 2d array
   }
 
   addSheet(sheetid, path) {
@@ -34,6 +39,12 @@ class aManager {
   addEntity(entity, entityid) {
     this.entities[entityid || this.entityid++] = entity;
     return entity;
+  }
+
+  addTile(x, y, tile) {
+    if(!this.tiles[x]) this.tiles[x] = {};
+    this.tiles[x][y] = tile;
+    return tile;
   }
 
   init(gl) {

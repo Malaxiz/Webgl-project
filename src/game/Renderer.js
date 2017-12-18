@@ -6,30 +6,10 @@ import Camera from './Camera';
 import m4 from './m4';
 import webglUtils from './webgl-utils';
 
-import drawImageVert from './shaders/draw-image.vert';
-import drawImageFrag from './shaders/draw-image.frag';
-
 export default class Renderer {
   constructor(gl) {
     this.gl = gl;
     this.camera = new Camera();
-
-    Manager.init(gl);
-
-    Manager.addSheet('MAIN', 'sheet.png');
-    Manager.addSprite('MAIN', 'testSprite', {
-      offX: 16,
-      offY: 0,
-    });
-
-    var range = (l,r) => new Array(r - l).fill().map((_,k) => k + l);
-    for(let y in range(0, 10)) {
-      for(let x in range(0, 10)) {
-        Manager.addEntity(new Entity([x*16*Manager.scale, y*16*Manager.scale, 16, 16], 'testSprite'));
-      }
-    }
-
-    this.camera.target = Manager.addEntity(new Entity([0, 0, 0, 0]), 'mouse');
 
     this.frame = gl.canvas.parentElement;
     this.resize();
@@ -52,6 +32,14 @@ export default class Renderer {
 
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.clearColor(0., 0., 0., 0.);
+
+    for(let x in Manager.tiles) {
+      for(let y in Manager.tiles[x]) {
+        Manager.tiles[x][y].render(this, Number(x), Number(y));
+      }
+    }
+
+    // console.log(Manager.tiles)
 
     for(let i in Manager.entities) {
       Manager.entities[i].render(this);

@@ -12,7 +12,7 @@ export default class Camera {
     let target = this.target.box;
 
     for(let i in this.box) {
-      let d = ((~-(target[i] - this.box[i]) / 1000) * 100)
+      let d = ((~-(target[i] - this.box[i]) / 1000) * 100);
       this.box[i] += (d < -1 || d > 1) ? ~-d : 0;
     }
   }

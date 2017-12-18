@@ -8,20 +8,21 @@ export default class Sprite {
     this.gl = gl;
 
     this.scale = Manager.scale;
-    this.offX = info.offX || 0;
-    this.offY = info.offY || 0;
+    this.offX = info.x || 0;
+    this.offY = info.y || 0;
     this.rotation = 0;
-    this.width = 16;
-    this.height = 16;
+    this.w = 16;
+    this.h = 16;
     this.sheet = sheet;
   }
 
-  render(x, y) {
+  render(x, y, offset={}) {
     let sheet = this.sheet;
     if(!sheet) return;
-    this.drawImage(sheet.info.texture, sheet.info.width, sheet.info.height,
-                   this.offX, this.offY, this.width, this.height,
-                   x, y, this.width * this.scale, this.height * this.scale);
+    
+    this.drawImage(sheet.info.texture, sheet.info.w, sheet.info.h,
+                   this.offX + (offset.x || 0), this.offY + (offset.y || 0), this.w + (offset.w || 0), this.h + (offset.h || 0),
+                   x, y, this.w * this.scale, this.h * this.scale);
   }
 
   drawImage(tex, texWidth, texHeight, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight, srcRotation) {
