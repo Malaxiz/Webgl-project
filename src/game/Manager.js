@@ -23,14 +23,17 @@ class aManager {
 
   addSheet(sheetid, path) {
     this.sheets[sheetid] = new SpriteSheet(this.gl, path);
+    return this.sheets[sheetid];
   }
 
   addSprite(sheetid, spriteid, info) {
     this.sprites[spriteid] = new Sprite(this.gl, this.sheets[sheetid], info);
+    return this.sprites[spriteid];
   }
 
   addEntity(entity, entityid) {
     this.entities[entityid || this.entityid++] = entity;
+    return entity;
   }
 
   init(gl) {

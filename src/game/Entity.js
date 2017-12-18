@@ -6,7 +6,10 @@ export default class Entity {
     this.sprite = sprite;
   }
 
-  render() {
-    Manager.sprites[this.sprite].render(this.box[0], this.box[1]);
+  render(renderer) {
+    if(!this.sprite || this.sprite === '') return;
+
+    let cam = renderer.camera.box;
+    Manager.sprites[this.sprite].render(this.box[0] - cam[0], this.box[1] - cam[1]);
   }
 }
