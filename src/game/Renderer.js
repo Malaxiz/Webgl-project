@@ -8,6 +8,8 @@ export default class Renderer {
   constructor(gl) {
     this.gl = gl;
     this.frame = gl.canvas.parentElement;
+    
+    gl.enable(gl.BLEND);
 
     let program = webglUtils.createProgramFromSources(gl, [drawImageVert, drawImageFrag]);
 
@@ -56,18 +58,16 @@ export default class Renderer {
       let drawInfo = {
         x: Math.random() * gl.canvas.width,
         y: Math.random() * gl.canvas.height,
-        dx: Math.random() > 0.5 ? -1 : 1,
-        dy: Math.random() > 0.5 ? -1 : 1,
-        xScale: Math.random() * 0.25 + 0.25,
-        yScale: Math.random() * 0.25 + 0.25,
-        offX: Math.random() * 0.75,
-        offY: Math.random() * 0.75,
-        offX: 0,
+        dx: 1,// Math.random() > 0.5 ? -1 : 1,
+        dy: 1,//Math.random() > 0.5 ? -1 : 1,
+        xScale: 0.5,// Math.random() * 0.25 + 0.25,
+        yScale: 0.25,//Math.random() * 0.25 + 0.25,
+        offX: 0.5,
         offY: 0,
-        rotation: Math.random() * Math.PI * 2,
+        rotation: 0,// Math.random() * Math.PI * 2,
         deltaRotation: (0.5 + Math.random() * 0.5) * (Math.random() > 0.5 ? -1 : 1),
         width:  1,
-        height: 1,
+        height: 0.5,
         textureInfo: textureInfos[0],
       };
       drawInfos.push(drawInfo);
@@ -115,6 +115,7 @@ export default class Renderer {
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clearColor(0., 0., 0., 0.);
 
     this.drawInfos.forEach((drawInfo) => {
       let dstX      = drawInfo.x;
@@ -171,9 +172,8 @@ export default class Renderer {
       srcRotation = 0;
     }
 
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.bindTexture(gl.TEXTURE_2D, tex);
-
-    // Tell WebGL to use our shader program pair
     gl.useProgram(program);
 
     // Setup the attributes to pull data from our buffers

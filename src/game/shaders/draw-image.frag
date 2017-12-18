@@ -11,5 +11,10 @@ void main() {
       v_texcoord.y > 1.0) {
     discard;
   }
-  gl_FragColor = texture2D(u_texture, v_texcoord);
+  vec4 fragColor = texture2D(u_texture, v_texcoord);
+  if(fragColor.a == 0.0){
+    discard;
+  }
+
+  gl_FragColor = fragColor;
 }
