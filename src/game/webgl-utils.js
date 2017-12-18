@@ -61,11 +61,11 @@ let webglUtils = (function(root, factory) {  // eslint-disable-line
    * @param {string} msg The message to log.
    */
   function error(msg) {
-    if (topWindow.console) {
-      if (topWindow.console.error) {
-        topWindow.console.error(msg);
-      } else if (topWindow.console.log) {
-        topWindow.console.log(msg);
+    if (console) {
+      if (console.error) {
+        console.error(msg);
+      } else if (console.log) {
+        console.log(msg);
       }
     }
   }

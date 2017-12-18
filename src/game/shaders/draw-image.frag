@@ -5,6 +5,8 @@ varying vec2 v_texcoord;
 uniform sampler2D u_texture;
 
 void main() {
+  vec2 uv = gl_FragCoord.xy;
+
   if (v_texcoord.x < 0.0 ||
       v_texcoord.y < 0.0 ||
       v_texcoord.x > 1.0 ||
