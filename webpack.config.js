@@ -1,9 +1,9 @@
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
-exports.default = {
+var client = {
   entry: './src',
   output: {
-    path: `${__dirname}/build`,
+    path: `${__dirname}/build/assets/`,
     filename: 'bundle.js'
   },
   module: {
@@ -41,4 +41,28 @@ exports.default = {
       to: `${__dirname}/build/assets`,
     }])
   ]
-}
+};
+
+var server = {
+  entry: './src/server/index.js',
+  target: 'node',
+  output: {
+    path: `${__dirname}/backend/`,
+    filename: 'backend.js'
+  },
+  module: {
+    rules: [{
+      test: /\.js$/,
+      use: [{
+        loader: 'babel-loader'
+      }]
+    },{
+      test: /\.node$/,
+      use: [{
+        loader: 'raw-loader'
+      }]
+    }]
+  }
+};
+
+exports.default = [ server, client ];

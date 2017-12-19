@@ -35,7 +35,8 @@ export default class Event {
       this.mousepos = [e.clientX - 5, e.clientY - 5];
     });
     addEventListener('wheel', e => {
-      Manager.scale -= e.deltaY * 0.001;
+      let d = e.deltaY * 0.005;
+      Manager.scale -= Manager.scale - d <= 0 ? 0 : d;
     });
   }
 
@@ -87,12 +88,16 @@ export default class Event {
     let y = this.mousepos[1] + camera[1];
     let scale = Manager.scale;
 
+    let xN = ~-(x / scale / 16) + !!(x > 0);
+    let yN = ~-(y / scale / 16) + !!(y > 0);
+
     if(this.mousedown[0]) {
-      Manager.addTile(~-(x / scale / 16) + !!(x > 0), ~-(y / scale / 16) + !!(y > 0), new Tile(this.brush));
+      if(Manager.tiles[xN] && Manager.tiles[xN][yN]) return;
+      Manager.addTile(xN, yN, new Tile(this.brush));
     }
     
     if(this.mousedown[2]) {
-      Manager.removeTile(~-(x / scale / 16) + !!(x > 0), ~-(y / scale / 16) + !!(y > 0));
+      Manager.removeTile(xN, yN);
     }
 
   }
