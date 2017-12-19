@@ -3,6 +3,7 @@ precision mediump float;
 varying vec2 v_texcoord;
 
 uniform sampler2D u_texture;
+uniform float time;
 
 void main() {
   vec2 uv = gl_FragCoord.xy;

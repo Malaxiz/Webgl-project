@@ -24,7 +24,8 @@ export default class Renderer {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
   }
 
-  render() {
+  render(delta) {
+    this.delta = delta;
     let gl = this.gl;
     this.resize();
 
@@ -38,8 +39,6 @@ export default class Renderer {
         Manager.tiles[x][y].render(this, Number(x), Number(y));
       }
     }
-
-    // console.log(Manager.tiles)
 
     for(let i in Manager.entities) {
       Manager.entities[i].render(this);

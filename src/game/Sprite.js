@@ -11,8 +11,8 @@ export default class Sprite {
     this.offX = info.x || 0;
     this.offY = info.y || 0;
     this.rotation = 0;
-    this.w = 16;
-    this.h = 16;
+    this.w = info.w || 16;
+    this.h = info.h || 16;
     this.sheet = sheet;
   }
 

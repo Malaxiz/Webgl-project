@@ -3,19 +3,20 @@ import { Manager } from './Manager';
 import Entity from './Entity';
 import Renderer from './Renderer';
 import Tile from './Tile';
+import Event from './Event';
 
 export default class Game {
   constructor() {
     this.entities = [];
 
-    let m = e => {
-      if(!this.renderer) return;
+    // let m = e => {
+    //   if(!this.renderer) return;
 
-      let box = Manager.entities['mouse'].box;
-      box[0] = 300 - e.pageX;
-      box[1] = 300 - e.pageY;
-    };
-    addEventListener('mousemove', m, false);
+    //   let box = Manager.entities['mouse'].box;
+    //   box[0] = 300 - e.pageX;
+    //   box[1] = 300 - e.pageY;
+    // };
+    // addEventListener('mousemove', m, false);
   }
 
   init(opts) {
@@ -28,14 +29,19 @@ export default class Game {
 
     this.setup();
 
+    let event = new Event(this);
+    this.event = event;
+
     let then = 0;
+    let delta = 0;
     let render = time => {
-      let now = time * 0.001;
-      let delta = Math.min(0.1, now - then);
+      let now = time;
+      delta = Math.min(0.1, now - then);
       then = now;
   
-      renderer.render();
+      event.update(delta);
       renderer.camera.update(delta);
+      renderer.render(delta);
   
       requestAnimationFrame(render);
     }
@@ -55,20 +61,20 @@ export default class Game {
     Manager.addSprite('TILES', 'grassTiles', {
       x: 0,
       y: 0,
-      w: 64,
-      h: 64,
+      w: 16,
+      h: 16,
     });
     Manager.addSprite('TILES', 'woodTiles', {
       x: 256,
       y: 0,
-      w: 64,
-      h: 64,
+      w: 16,
+      h: 16,
     });
     Manager.addSprite('TILES', 'stoneTiles', {
       x: 64,
       y: 0,
-      w: 64,
-      h: 64,
+      w: 16,
+      h: 16,
     });
 
     var range = (l,r) => new Array(r - l).fill().map((_,k) => k + l);
@@ -77,8 +83,11 @@ export default class Game {
         Manager.addTile(x, y, new Tile(gl, 'grassTiles'));
       }
     }
-    Manager.addTile(2, 3, new Tile(gl, 'woodTiles'));
-    Manager.addTile(5, 2, new Tile(gl, 'stoneTiles'));
+    // Manager.addTile(2, 3, new Tile(gl, 'woodTiles'));
+    // Manager.addTile(5, 2, new Tile(gl, 'stoneTiles'));
+
+    let add = (x, y, sprite) => Manager.addTile(x, y, new Tile(gl, sprite));
+    window.add = add;
 
     this.renderer.camera.target = Manager.addEntity(new Entity([0, 0, 0, 0]), 'mouse');
   }

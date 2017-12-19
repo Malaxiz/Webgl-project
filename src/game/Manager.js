@@ -15,6 +15,8 @@ class aManager {
     this.scale = 4;
     this.tileSize = 16;
 
+    window.manager = this;
+
     this.programs = {};
 
     this.sheets = {};
@@ -47,6 +49,11 @@ class aManager {
     return tile;
   }
 
+  removeTile(x, y) {
+    if(!this.tiles[x]) this.tiles[x] = {};
+    delete this.tiles[x][y];
+  }
+
   init(gl) {
     this.gl = gl;
     let draw = {};
@@ -57,6 +64,7 @@ class aManager {
     draw.texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
 
     draw.matrixLocation = gl.getUniformLocation(program, "u_matrix");
+    draw.timeLocation = gl.getUniformLocation(program, "time");
     draw.textureMatrixLocation = gl.getUniformLocation(program, "u_textureMatrix");
     draw.textureLocation = gl.getUniformLocation(program, "u_texture");
 
