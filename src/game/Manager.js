@@ -12,7 +12,7 @@ class aManager {
     this.gl = undefined;
     this.drawProgram = undefined;
 
-    this.scale = 4;
+    this.scale = 2;
     this.tileSize = 16;
 
     window.manager = this;

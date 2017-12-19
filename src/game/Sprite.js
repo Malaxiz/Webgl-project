@@ -7,7 +7,6 @@ export default class Sprite {
   constructor(gl, sheet, info) {
     this.gl = gl;
 
-    this.scale = Manager.scale;
     this.offX = info.x || 0;
     this.offY = info.y || 0;
     this.rotation = 0;
@@ -22,7 +21,7 @@ export default class Sprite {
     
     this.drawImage(sheet.info.texture, sheet.info.w, sheet.info.h,
                    this.offX + (offset.x || 0), this.offY + (offset.y || 0), this.w + (offset.w || 0), this.h + (offset.h || 0),
-                   x, y, this.w * this.scale, this.h * this.scale);
+                   x, y, this.w * Manager.scale, this.h * Manager.scale);
   }
 
   drawImage(tex, texWidth, texHeight, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight, srcRotation) {

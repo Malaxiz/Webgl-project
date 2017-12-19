@@ -34,6 +34,9 @@ export default class Event {
     addEventListener('mousemove', e => {
       this.mousepos = [e.clientX - 5, e.clientY - 5];
     });
+    addEventListener('wheel', e => {
+      Manager.scale -= e.deltaY * 0.001;
+    });
   }
 
   keydown(e) {
