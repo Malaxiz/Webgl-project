@@ -1243,9 +1243,9 @@ let webglUtils = (function(root, factory) {  // eslint-disable-line
     });
   }
 
-  var isIE = /*@cc_on!@*/false || !!document.documentMode;
+  var isIE = false;///*@cc_on!@*/false || !!document.documentMode;
   // Edge 20+
-  var isEdge = !isIE && !!window.StyleMedia;
+  var isEdge = false;//!isIE && !!window.StyleMedia;
   if (isEdge) {
     // Hack for Edge. Edge's WebGL implmentation is crap still and so they
     // only respond to "experimental-webgl". I don't want to clutter the

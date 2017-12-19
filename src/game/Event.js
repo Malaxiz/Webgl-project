@@ -51,8 +51,8 @@ export default class Event {
     this.keysdown.splice(index, 1);
   }
 
-  update(delta) {
-    let mouse = Manager.entities['mouse'];
+  update(delta, instance) {
+    let mouse = instance.entities['mouse'];
 
     let l = {
       'W': () => {
@@ -92,12 +92,15 @@ export default class Event {
     let yN = ~-(y / scale / 16) + !!(y > 0);
 
     if(this.mousedown[0]) {
-      if(Manager.tiles[xN] && Manager.tiles[xN][yN]) return;
-      Manager.addTile(xN, yN, new Tile(this.brush));
+      this.game.network.socket.emit('mousedown', {
+        x, y
+      });
+      if(instance.tiles[xN] && instance.tiles[xN][yN]) return;
+      instance.addTile(xN, yN, new Tile(this.brush));
     }
     
     if(this.mousedown[2]) {
-      Manager.removeTile(xN, yN);
+      instance.removeTile(xN, yN);
     }
 
   }

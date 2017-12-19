@@ -61,6 +61,11 @@ var server = {
       use: [{
         loader: 'raw-loader'
       }]
+    },{
+      test: /\.(vert|frag)$/,
+      use: [{
+        loader: 'raw-loader'
+      }]
     }]
   }
 };

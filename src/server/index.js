@@ -1,3 +1,5 @@
+import Server from './Server';
+
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -7,22 +9,17 @@ var io = require('socket.io')(http, {
   wsEngine: 'ws'
 });
 
-import Server from './Server';
-
 const port = process.env.PORT || 3000;
-
 app.use('/assets', express.static(path.resolve('build/assets/')));
+
+let server = new Server();
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve('build/index.html'));
 });
 
 io.on('connection', s => {
-  console.log('connection');
-  let server = new Server();
-  s.on('disconnect', () => {
-    console.log('disconnect')
-  })
+  server.newSocket(s);
 });
 
 http.listen(port, () => {

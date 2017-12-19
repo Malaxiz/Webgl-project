@@ -7,7 +7,7 @@ import webglUtils from './webgl-utils';
 import drawImageVert from './shaders/draw-image.vert';
 import drawImageFrag from './shaders/draw-image.frag';
 
-class aManager {
+export default class AssetManager {
   constructor() {
     this.gl = undefined;
     this.drawProgram = undefined;
@@ -15,17 +15,12 @@ class aManager {
     this.scale = 2;
     this.tileSize = 16;
 
-    window.manager = this;
+    // window.manager = this;
 
     this.programs = {};
 
     this.sheets = {};
     this.sprites = {};
-
-    this.entityid = 1;
-    this.entities = {};
-
-    this.tiles = {}; // 2d array
   }
 
   addSheet(sheetid, path) {
@@ -36,24 +31,6 @@ class aManager {
   addSprite(sheetid, spriteid, info) {
     this.sprites[spriteid] = new Sprite(this.gl, this.sheets[sheetid], info);
     return this.sprites[spriteid];
-  }
-
-  addEntity(entity, entityid) {
-    this.entities[entityid || this.entityid++] = entity;
-    return entity;
-  }
-
-  addTile(x, y, tile) {
-    if(!this.tiles[x]) this.tiles[x] = {};
-    this.tiles[x][y] = tile;
-    localStorage.setItem('map', JSON.stringify(this.tiles));
-    return tile;
-  }
-
-  removeTile(x, y) {
-    if(!this.tiles[x]) this.tiles[x] = {};
-    delete this.tiles[x][y];
-    localStorage.setItem('map', JSON.stringify(this.tiles));
   }
 
   init(gl) {
@@ -101,4 +78,4 @@ class aManager {
   }
 }
 
-export let Manager = new aManager();
+export let Manager = new AssetManager();

@@ -5,12 +5,12 @@ export default class Tile {
     this.sprite = sprite;
   }
 
-  render(renderer, x, y) {
+  render(delta, instance, renderer, x, y) {
     let cam = renderer.camera.box;
     let size = Manager.tileSize;
     let scale = Manager.scale;
 
-    let tiles = Manager.tiles;
+    let tiles = instance.tiles;
     let sum = this.getSum(x, y, tiles);
 
     let offset = {

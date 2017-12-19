@@ -5,6 +5,7 @@ import Renderer from './Renderer';
 import Tile from './Tile';
 import Event from './Event';
 import Network from './Network';
+import Instance from './Instance';
 
 export default class Game {
   constructor() {
@@ -18,6 +19,9 @@ export default class Game {
 
     let renderer = new Renderer(gl);
     this.renderer = renderer;
+
+    let instance = new Instance();
+    this.instance = instance;
 
     this.setup();
 
@@ -34,9 +38,9 @@ export default class Game {
       delta = Math.min(0.1, now - then);
       then = now;
   
-      event.update(delta);
-      renderer.camera.update(delta);
-      renderer.render(delta);
+      event.update(delta, instance);
+      renderer.camera.update(delta, instance);
+      renderer.render(delta, instance);
   
       requestAnimationFrame(render);
     }

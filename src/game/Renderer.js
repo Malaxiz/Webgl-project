@@ -24,7 +24,7 @@ export default class Renderer {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
   }
 
-  render(delta) {
+  render(delta, instance) {
     this.delta = delta;
     let gl = this.gl;
     this.resize();
@@ -34,14 +34,14 @@ export default class Renderer {
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.clearColor(0., 0., 0., 0.);
 
-    for(let x in Manager.tiles) {
-      for(let y in Manager.tiles[x]) {
-        Manager.tiles[x][y].render(this, Number(x), Number(y));
+    for(let x in instance.tiles) {
+      for(let y in instance.tiles[x]) {
+        instance.tiles[x][y].render(delta, instance, this, Number(x), Number(y));
       }
     }
 
-    for(let i in Manager.entities) {
-      Manager.entities[i].render(this);
+    for(let i in instance.entities) {
+      instance.entities[i].render(delta, instance, this);
     }
   }
 }
