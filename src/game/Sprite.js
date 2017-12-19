@@ -15,13 +15,32 @@ export default class Sprite {
     this.sheet = sheet;
   }
 
-  render(x, y, offset={}) {
+  render(x, y, renderer, offset={}) {
     let sheet = this.sheet;
     if(!sheet) return;
+
+    let collision = (box1, box2) => {
+      let x = 0, y = 1, w = 2, h = 3;
+      if(box1[x] > box2[x] + box2[w]) return false;
+      if(box1[x] + box1[w] < box2[x]) return false;
+      if(box1[y] > box2[y] + box2[h]) return false;
+      if(box1[y] + box1[h] < box2[y]) return false;
+      return true;
+    };
+
+    let cam = renderer.camera.box;
+    let w = this.w * Manager.scale;
+    let h = this.h * Manager.scale;
     
+    // if(!collision([x, y, w, h], [cam[0] + 200, cam[1] + 200, cam[2] - 400, cam[3] - 400])) return;
+    if(!collision([x, y, w, h], cam)) return;
+
+    x -= cam[0];
+    y -= cam[1];
+
     this.drawImage(sheet.info.texture, sheet.info.w, sheet.info.h,
                    this.offX + (offset.x || 0), this.offY + (offset.y || 0), this.w + (offset.w || 0), this.h + (offset.h || 0),
-                   x, y, this.w * Manager.scale, this.h * Manager.scale);
+                   x, y, w, h);
   }
 
   drawImage(tex, texWidth, texHeight, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight, srcRotation) {

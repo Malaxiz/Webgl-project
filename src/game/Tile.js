@@ -5,7 +5,7 @@ export default class Tile {
     this.sprite = sprite;
   }
 
-  render(delta, instance, renderer, x, y) {
+  render(instance, renderer, x, y) {
     let cam = renderer.camera.box;
     let size = Manager.tileSize;
     let scale = Manager.scale;
@@ -18,7 +18,7 @@ export default class Tile {
       y: (~-(sum / 4) + 1) * size,
     };
     
-    Manager.sprites[this.sprite].render(x*scale*size - cam[0], y*scale*size - cam[1], offset);
+    Manager.sprites[this.sprite].render(x*scale*size, y*scale*size, renderer, offset);
   }
 
   getSum(x, y, tiles) {

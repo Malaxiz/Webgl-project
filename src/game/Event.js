@@ -51,21 +51,22 @@ export default class Event {
     this.keysdown.splice(index, 1);
   }
 
-  update(delta, instance) {
+  update(instance) {
     let mouse = instance.entities['mouse'];
+    let c = 10;
 
     let l = {
       'W': () => {
-        mouse.box[1] -= 20;
+        mouse.box[1] -= c;
       },
       'S': () => {
-        mouse.box[1] += 20;
+        mouse.box[1] += c;
       },
       'A': () => {
-        mouse.box[0] -= 20;
+        mouse.box[0] -= c;
       },
       'D': () => {
-        mouse.box[0] += 20;
+        mouse.box[0] += c;
       },
       '1': () => {
         this.brush = 'grassTiles';
@@ -83,24 +84,30 @@ export default class Event {
       action ? action() : undefined;
     }
 
+    let s = this.game.network.s;
+
     let camera = this.game.renderer.camera.box;
-    let x = this.mousepos[0] + camera[0];
-    let y = this.mousepos[1] + camera[1];
+    let xM = this.mousepos[0] + camera[0];
+    let yM = this.mousepos[1] + camera[1];
     let scale = Manager.scale;
 
-    let xN = ~-(x / scale / 16) + !!(x > 0);
-    let yN = ~-(y / scale / 16) + !!(y > 0);
+    let x = ~-(xM / scale / 16) + !!(xM > 0);
+    let y = ~-(yM / scale / 16) + !!(yM > 0);
 
     if(this.mousedown[0]) {
-      this.game.network.socket.emit('mousedown', {
-        x, y
+      s.emit('tileAdd', {
+        x, y,
+        type: this.brush
       });
-      if(instance.tiles[xN] && instance.tiles[xN][yN]) return;
-      instance.addTile(xN, yN, new Tile(this.brush));
+      // if(instance.tiles[xN] && instance.tiles[xN][yN]) return;
+      // instance.addTile(xN, yN, new Tile(this.brush));
     }
     
     if(this.mousedown[2]) {
-      instance.removeTile(xN, yN);
+      // instance.removeTile(xN, yN);
+      s.emit('tileRemove', {
+        x, y
+      });
     }
 
   }

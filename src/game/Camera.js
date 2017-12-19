@@ -2,17 +2,17 @@
 
 export default class Camera {
   constructor() {
-    this.box = [0, 0];
+    this.box = [0, 0, 0, 0];
 
     this.target;
   }
 
-  update(delta) {
+  update() {
     if(!this.target) return;
     let target = this.target.box;
 
-    for(let i in this.box) {
-      let d = ((~-(target[i] - this.box[i])) / 2) * delta;
+    for(let i in [0,1]) {
+      let d = ((~-(target[i] - this.box[i])) / 10);
       this.box[i] += (d < -1 || d > 1) ? ~-d : 0;
     }
   }

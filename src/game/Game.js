@@ -31,20 +31,25 @@ export default class Game {
     let network = new Network(this);
     this.network = network;
 
+    let timestep = 1000.0 / 60.0;
+
     let then = 0;
     let delta = 0;
-    let render = time => {
-      let now = time;
-      delta = Math.min(0.1, now - then);
+    let render = now => {
+      delta += now - then;
       then = now;
-  
-      event.update(delta, instance);
-      renderer.camera.update(delta, instance);
-      renderer.render(delta, instance);
-  
+
+      while(delta >= timestep) {
+        event.update(instance);
+        renderer.camera.update(instance);
+        delta -= timestep;
+      }
+      
+      renderer.render(instance);
       requestAnimationFrame(render);
     }
     requestAnimationFrame(render);
+
   }
 
   setup() {
@@ -99,6 +104,6 @@ export default class Game {
     // let add = (x, y, sprite) => Manager.addTile(x, y, new Tile(sprite));
     // window.add = add;
 
-    // this.renderer.camera.target = Manager.addEntity(new Entity([0, 0, 0, 0]), 'mouse');
+    this.renderer.camera.target = this.instance.addEntity(new Entity([0, 0, 0, 0]), 'mouse');
   }
 }

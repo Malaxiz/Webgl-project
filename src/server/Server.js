@@ -1,36 +1,56 @@
-import Instance from './../game/Instance';
+import ServerInstance from './ServerInstance';
+import User from './User';
+
 import Tile from './../game/Tile';
+import { setImmediate } from 'timers';
 
 export default class Server {
   constructor() {
-    this.instances = {};
-    this.sockets = {};
+    this.instances = {}; // ServerInstances
+    this.users = {};
 
-    // let manager = new aManager();
-    // this.manager = manager;
+    this.instances['lobby'] = new ServerInstance('lobby');
 
     let range = (l,r) => new Array(r - l).fill().map((_,k) => k + l);
     for(let y in range(0, 5)) {
       for(let x in range(0, 10)) {
-        // manager.addTile(x, y, new Tile('grassTiles'));
+        this.instances['lobby'].instance.addTile(x, y, new Tile('grassTiles'));
       }
     }
+
+    let timestep = 1000.0 / 60.0;
+
+    let then = Date.now();
+    let delta = 0;
+    let update = () => {
+      let now = Date.now();
+      delta += now - then;
+      then = now;
+
+      while(delta >= timestep) {
+        for(let i in this.instances) {
+          this.instances[i].update();
+        }
+        delta -= timestep;
+      }
+
+      setImmediate(update);
+    }
+    update();
   }
 
   newSocket(s) {
     console.log(`new connection: ${s.id}`);
     s.on('disconnect', () => {
       console.log('disconnect');
-    })
-  
-    s.on('mousedown', msg => {
-      console.log(msg);
     });
 
     s.emit('welcome', {
-      // map: this.manager.tiles
+      map: this.instances['lobby'].instance.tiles
     });
 
-    this.sockets[s.id] = s;
+    let user = new User(this, s);
+    this.users[s.id] = user;
+    this.instances['lobby'].addUser(user);
   }
 }

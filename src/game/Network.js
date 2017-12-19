@@ -7,20 +7,38 @@ export default class Network {
   constructor(game) {
     this.game = game;
 
-    let socket = IO();
-    this.socket = socket;
+    let s = IO();
+    this.s = s;
 
-    socket.on('welcome', msg => {
+    let instance = game.instance;
+    this.instance = instance;
+
+    s.on('welcome', msg => {
       let map = msg.map;
       for(let x in map) {
         for(let y in map[x]) {
-          Manager.addTile(x, y, new Tile(map[x][y].sprite));
+          instance.addTile(x, y, new Tile(map[x][y].sprite));
         }
       }
     });
+
+    this.setup();
   }
 
-  event(e) {
+  setup() {
+    let instance = this.instance;
 
+    let events = {
+      'tileAdd': msg => {
+        instance.addTile(msg.x, msg.y, new Tile(msg.type));
+      },
+      'tileRemove': msg => {
+        instance.removeTile(msg.x, msg.y);
+      },
+    };
+
+    for(let i in events) {
+      this.s.on(i, events[i]);
+    }
   }
 }

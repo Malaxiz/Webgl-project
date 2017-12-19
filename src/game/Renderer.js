@@ -21,11 +21,14 @@ export default class Renderer {
     let gl = this.gl;
     gl.canvas.width = this.frame.clientWidth;
     gl.canvas.height = this.frame.clientHeight;
+
+    this.camera.box[2] = gl.canvas.width;
+    this.camera.box[3] = gl.canvas.height;
+
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
   }
 
-  render(delta, instance) {
-    this.delta = delta;
+  render(instance) {
     let gl = this.gl;
     this.resize();
 
@@ -36,12 +39,12 @@ export default class Renderer {
 
     for(let x in instance.tiles) {
       for(let y in instance.tiles[x]) {
-        instance.tiles[x][y].render(delta, instance, this, Number(x), Number(y));
+        instance.tiles[x][y].render(instance, this, Number(x), Number(y));
       }
     }
 
     for(let i in instance.entities) {
-      instance.entities[i].render(delta, instance, this);
+      instance.entities[i].render(instance, this);
     }
   }
 }
