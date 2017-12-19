@@ -12,6 +12,8 @@ export default class Event {
     this.mousedown = [false, false, false];
     this.mousepos = [0, 0];
 
+    this.brush = 'woodTiles';
+
     this.init();
   }
 
@@ -36,6 +38,7 @@ export default class Event {
 
   keydown(e) {
     if(this.keysdown.includes(e.code)) return;
+    console.log(e)
     this.keysdown.push(e.code)
   }
 
@@ -60,10 +63,19 @@ export default class Event {
       'D': () => {
         mouse.box[0] += 20;
       },
+      '1': () => {
+        this.brush = 'grassTiles';
+      },
+      '2': () => {
+        this.brush = 'woodTiles';
+      },
+      '3': () => {
+        this.brush = 'stoneTiles';
+      },
     };
 
     for(let i in this.keysdown) {
-      let action = l[this.keysdown[i].substr(3)];
+      let action = l[this.keysdown[i].substr(-1)];
       action ? action() : undefined;
     }
 
@@ -73,7 +85,7 @@ export default class Event {
     let scale = Manager.scale;
 
     if(this.mousedown[0]) {
-      Manager.addTile(~-(x / scale / 16) + !!(x > 0), ~-(y / scale / 16) + !!(y > 0), new Tile(this.game.gl, 'woodTiles'));
+      Manager.addTile(~-(x / scale / 16) + !!(x > 0), ~-(y / scale / 16) + !!(y > 0), new Tile(this.brush));
     }
     
     if(this.mousedown[2]) {

@@ -46,12 +46,14 @@ class aManager {
   addTile(x, y, tile) {
     if(!this.tiles[x]) this.tiles[x] = {};
     this.tiles[x][y] = tile;
+    localStorage.setItem('map', JSON.stringify(this.tiles));
     return tile;
   }
 
   removeTile(x, y) {
     if(!this.tiles[x]) this.tiles[x] = {};
     delete this.tiles[x][y];
+    localStorage.setItem('map', JSON.stringify(this.tiles));
   }
 
   init(gl) {

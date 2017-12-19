@@ -77,16 +77,27 @@ export default class Game {
       h: 16,
     });
 
-    var range = (l,r) => new Array(r - l).fill().map((_,k) => k + l);
-    for(let y in range(0, 5)) {
-      for(let x in range(0, 10)) {
-        Manager.addTile(x, y, new Tile(gl, 'grassTiles'));
+    let loaded = localStorage.getItem('map');
+    try {
+      loaded = JSON.parse(loaded);
+    } catch(e) { }
+
+    if(loaded) {
+      for(let x in loaded) {
+        for(let y in loaded[x]) {
+          Manager.addTile(x, y, new Tile(loaded[x][y].sprite));
+        }
+      }
+    } else {
+      let range = (l,r) => new Array(r - l).fill().map((_,k) => k + l);
+      for(let y in range(0, 5)) {
+        for(let x in range(0, 10)) {
+          Manager.addTile(x, y, new Tile('grassTiles'));
+        }
       }
     }
-    // Manager.addTile(2, 3, new Tile(gl, 'woodTiles'));
-    // Manager.addTile(5, 2, new Tile(gl, 'stoneTiles'));
 
-    let add = (x, y, sprite) => Manager.addTile(x, y, new Tile(gl, sprite));
+    let add = (x, y, sprite) => Manager.addTile(x, y, new Tile(sprite));
     window.add = add;
 
     this.renderer.camera.target = Manager.addEntity(new Entity([0, 0, 0, 0]), 'mouse');

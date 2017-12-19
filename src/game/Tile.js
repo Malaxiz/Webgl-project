@@ -1,8 +1,7 @@
 import { Manager } from './Manager';
 
 export default class Tile {
-  constructor(gl, sprite) {
-    this.gl = gl;
+  constructor(sprite) {
     this.sprite = sprite;
   }
 
