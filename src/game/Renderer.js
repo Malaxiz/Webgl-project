@@ -44,7 +44,8 @@ export default class Renderer {
     }
 
     for(let i in instance.entities) {
-      instance.entities[i].render(instance, this);
+      instance.entities[i].render(this);
     }
+    
   }
 }

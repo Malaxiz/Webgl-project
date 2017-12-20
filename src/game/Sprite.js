@@ -16,36 +16,16 @@ export default class Sprite {
   }
 
   render(x, y, renderer, offset={}) {
-    let sheet = this.sheet;
-    if(!sheet) return;
-
-    let collision = (box1, box2) => {
-      let x = 0, y = 1, w = 2, h = 3;
-      if(box1[x] > box2[x] + box2[w]) return false;
-      if(box1[x] + box1[w] < box2[x]) return false;
-      if(box1[y] > box2[y] + box2[h]) return false;
-      if(box1[y] + box1[h] < box2[y]) return false;
-      return true;
-    };
-
-    let cam = renderer.camera.box;
-    let w = this.w * Manager.scale;
-    let h = this.h * Manager.scale;
-    
-    // if(!collision([x, y, w, h], [cam[0] + 200, cam[1] + 200, cam[2] - 400, cam[3] - 400])) return;
-    if(!collision([x, y, w, h], cam)) return;
-
-    x -= cam[0];
-    y -= cam[1];
-
-    this.drawImage(sheet.info.texture, sheet.info.w, sheet.info.h,
-                   this.offX + (offset.x || 0), this.offY + (offset.y || 0), this.w + (offset.w || 0), this.h + (offset.h || 0),
-                   x, y, w, h);
+    this.doRender('draw', x, y, renderer, offset);
   }
 
-  drawImage(tex, texWidth, texHeight, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight, srcRotation) {
+  renderOutline(x, y, renderer, offset={}) {
+    this.doRender('line', x, y, renderer, offset);
+  }
+
+  drawImage(prog, tex, texWidth, texHeight, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight, srcRotation) {
     let gl = this.gl;
-    let program = Manager.drawProgram;
+    let program = Manager.programs[prog].program;
 
     if (dstX === undefined) {
       dstX = srcX;
@@ -77,13 +57,15 @@ export default class Sprite {
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.useProgram(program);
 
+    let draw = Manager.programs[prog].info;
+
     // Setup the attributes to pull data from our buffers
-    gl.bindBuffer(gl.ARRAY_BUFFER, Manager.draw.positionBuffer);
-    gl.enableVertexAttribArray(Manager.draw.positionLocation);
-    gl.vertexAttribPointer(Manager.draw.positionLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, Manager.draw.texcoordBuffer);
-    gl.enableVertexAttribArray(Manager.draw.texcoordLocation);
-    gl.vertexAttribPointer(Manager.draw.texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, draw.positionBuffer);
+    gl.enableVertexAttribArray(draw.positionLocation);
+    gl.vertexAttribPointer(draw.positionLocation, 2, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, draw.texcoordBuffer);
+    gl.enableVertexAttribArray(draw.texcoordLocation);
+    gl.vertexAttribPointer(draw.texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 
     // this matirx will convert from pixels to clip space
     let matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
@@ -96,7 +78,7 @@ export default class Sprite {
     matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 
     // Set the matrix.
-    gl.uniformMatrix4fv(Manager.draw.matrixLocation, false, matrix);
+    gl.uniformMatrix4fv(draw.matrixLocation, false, matrix);
 
     // just like a 2d projection matrix except in texture space (0 to 1)
     // instead of clip space. This matrix puts us in pixel space.
@@ -114,12 +96,40 @@ export default class Sprite {
     texMatrix = m4.scale(texMatrix, srcWidth, srcHeight, 1);
 
     // Set the texture matrix.
-    gl.uniformMatrix4fv(Manager.draw.textureMatrixLocation, false, texMatrix);
+    gl.uniformMatrix4fv(draw.textureMatrixLocation, false, texMatrix);
 
     // Tell the shader to get the texture from texture unit 0
-    gl.uniform1i(Manager.draw.textureLocation, 0);
+    gl.uniform1i(draw.textureLocation, 0);
 
     // draw the quad (2 triangles, 6 vertices)
     gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+
+  doRender(program, x, y, renderer, offset={}) {
+    let sheet = this.sheet;
+    if(!sheet) return;
+
+    let collision = (box1, box2) => {
+      let x = 0, y = 1, w = 2, h = 3;
+      if(box1[x] > box2[x] + box2[w]) return false;
+      if(box1[x] + box1[w] < box2[x]) return false;
+      if(box1[y] > box2[y] + box2[h]) return false;
+      if(box1[y] + box1[h] < box2[y]) return false;
+      return true;
+    };
+
+    let cam = renderer.camera.box;
+    let w = this.w * Manager.scale;
+    let h = this.h * Manager.scale;
+    
+    // if(!collision([x, y, w, h], [cam[0] + 200, cam[1] + 200, cam[2] - 400, cam[3] - 400])) return;
+    if(!collision([x, y, w, h], cam)) return;
+
+    x -= cam[0];
+    y -= cam[1];
+
+    this.drawImage(program, sheet.info.texture, sheet.info.w, sheet.info.h,
+                   this.offX + (offset.x || 0), this.offY + (offset.y || 0), this.w + (offset.w || 0), this.h + (offset.h || 0),
+                   x, y, w, h);
   }
 }

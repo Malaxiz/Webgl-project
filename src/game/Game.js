@@ -101,6 +101,8 @@ export default class Game {
     //   }
     // }
 
+    this.instance.addEntity(new Entity([150, 150, 16, 16], 'testSprite'));
+
     // let add = (x, y, sprite) => Manager.addTile(x, y, new Tile(sprite));
     // window.add = add;
 

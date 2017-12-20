@@ -9,6 +9,10 @@ export default class Entity {
   render(renderer) {
     if(!this.sprite || this.sprite === '') return;
 
-    Manager.sprites[this.sprite].render(this.box[0], this.box[1], renderer);
+    let scale = Manager.scale;
+
+    let sprite = Manager.sprites[this.sprite];
+    sprite.render(this.box[0] * scale, this.box[1] * scale, renderer);
+    sprite.renderOutline(this.box[0] * scale, this.box[1] * scale, renderer);
   }
 }

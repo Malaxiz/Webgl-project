@@ -1,4 +1,4 @@
-// SpriteSheet.js
+import { Manager } from './Manager';
 
 export default class SpriteSheet {
   constructor(gl, src) {
@@ -6,6 +6,8 @@ export default class SpriteSheet {
 
     this.loaded = false;
     this.info = this.loadImageAndCreateTextureInfo(src);
+
+    this.alpha = {};
   }
 
   loadImageAndCreateTextureInfo(url) {
@@ -32,6 +34,21 @@ export default class SpriteSheet {
 
       gl.bindTexture(gl.TEXTURE_2D, textureInfo.texture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+
+      // let canvas = Manager.loadContext;
+      // canvas.width = img.width;
+      // canvas.height = img.height;
+      // let context = canvas.getContext('2d');
+      // context.drawImage(img, 0, 0, img.width, img.height);
+
+      // let range = (l,r) => new Array(r - l).fill().map((_,k) => k + l);
+      // // for(let x in range(0, img.width)) {
+      // //   for(let y in range(0, img.height)) {
+      // //     let data = context.getImageData(x, y, 1, 1).data;
+      // //     // console.log(data)
+      // //   }
+      // // }
+
       this.loaded = true;
     });
     img.src = `./assets/${url}`;

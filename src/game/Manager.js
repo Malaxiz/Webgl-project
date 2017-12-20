@@ -7,20 +7,24 @@ import webglUtils from './webgl-utils';
 import drawImageVert from './shaders/draw-image.vert';
 import drawImageFrag from './shaders/draw-image.frag';
 
+import drawLineVert from './shaders/draw-outline.vert';
+import drawLineFrag from './shaders/draw-outline.frag';
+
 export default class AssetManager {
   constructor() {
     this.gl = undefined;
-    this.drawProgram = undefined;
+
+    try {
+      this.loadContext = document.getElementById('temp');
+    } catch(e) { }
 
     this.scale = 2;
     this.tileSize = 16;
 
-    // window.manager = this;
-
     this.programs = {};
-
     this.sheets = {};
     this.sprites = {};
+    this.programs = {};
   }
 
   addSheet(sheetid, path) {
@@ -35,20 +39,26 @@ export default class AssetManager {
 
   init(gl) {
     this.gl = gl;
-    let draw = {};
-
-    let program = webglUtils.createProgramFromSources(gl, [drawImageVert, drawImageFrag]);
     
-    draw.positionLocation = gl.getAttribLocation(program, "a_position");
-    draw.texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
+    this.programs['draw'] = this.spriteProgram(drawImageVert, drawImageFrag);
+    this.programs['line'] = this.spriteProgram(drawLineVert, drawLineFrag);
+  }
 
-    draw.matrixLocation = gl.getUniformLocation(program, "u_matrix");
-    draw.timeLocation = gl.getUniformLocation(program, "time");
-    draw.textureMatrixLocation = gl.getUniformLocation(program, "u_textureMatrix");
-    draw.textureLocation = gl.getUniformLocation(program, "u_texture");
+  spriteProgram(vert, frag) {
+    let gl = this.gl;
+    let info = {};
+    let program = webglUtils.createProgramFromSources(gl, [vert, frag]);
 
-    draw.positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, draw.positionBuffer);
+    info.positionLocation = gl.getAttribLocation(program, "a_position");
+    info.texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
+
+    info.matrixLocation = gl.getUniformLocation(program, "u_matrix");
+    info.timeLocation = gl.getUniformLocation(program, "time");
+    info.textureMatrixLocation = gl.getUniformLocation(program, "u_textureMatrix");
+    info.textureLocation = gl.getUniformLocation(program, "u_texture");
+
+    info.positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, info.positionBuffer);
 
     let positions = [
       0, 0,
@@ -60,8 +70,8 @@ export default class AssetManager {
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-    draw.texcoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, draw.texcoordBuffer);
+    info.texcoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, info.texcoordBuffer);
   
     let texcoords = [
       0, 0,
@@ -73,8 +83,7 @@ export default class AssetManager {
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
 
-    this.drawProgram = program;
-    this.draw = draw;
+    return { program, info };
   }
 }
 
