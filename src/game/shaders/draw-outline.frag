@@ -8,12 +8,13 @@ uniform vec2 stepSize;
 uniform mat4 u_matrix;
 uniform vec4 realDims;
 uniform vec2 texDim;
+uniform float scale;
 
 void main() {
   vec2 uv = gl_FragCoord.xy;
   vec4 fragColor;
   vec2 step = vec2(stepSize.x, stepSize.y);
-  float what = 0.667;
+  step *= 1.0 / (scale / 3.0);
 
   // whoever inherits this code, I pity you
   

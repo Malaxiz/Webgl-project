@@ -61,6 +61,8 @@ export default class Game {
     Manager.addSprite('MAIN', 'testSprite', {
       x: 16,
       y: 16*7,
+      w: 32,
+      h: 32,
     });
     Manager.addSprite('TILES', 'grassTiles', {
       x: 0,

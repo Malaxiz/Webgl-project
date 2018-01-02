@@ -61,6 +61,7 @@ export default class AssetManager {
     info.spriteLocation = gl.getUniformLocation(program, "sprite");
     info.realDimsLocation = gl.getUniformLocation(program, "realDims");
     info.texDimLocation = gl.getUniformLocation(program, "texDim");
+    info.scaleLocation = gl.getUniformLocation(program, "scale");
 
     info.positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, info.positionBuffer);
