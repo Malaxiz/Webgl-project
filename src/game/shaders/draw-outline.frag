@@ -14,7 +14,7 @@ void main() {
   vec2 uv = gl_FragCoord.xy;
   vec4 fragColor;
   vec2 step = vec2(stepSize.x, stepSize.y);
-  step *= 1.0 / (scale / 3.0);
+  step *= 1.0 / (scale / 4.0);
 
   // whoever inherits this code, I pity you
   

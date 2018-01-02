@@ -1,16 +1,16 @@
 import { Manager } from './Manager';
 
 export default class Entity {
-  constructor(box, sprite='') {
+  constructor(box, renderable='') {
     this.box = box;
-    this.sprite = sprite;
+    this.renderable = renderable;
   }
 
   render(renderer) {
-    if(!this.sprite || this.sprite === '') return;
+    if(!this.renderable || this.renderable === '') return;
 
-    let sprite = Manager.sprites[this.sprite];
-    sprite.render(this.box[0], this.box[1], renderer);
-    sprite.renderOutline(this.box[0], this.box[1], renderer);
+    let renderable = Manager.renderables[this.renderable];
+    renderable.render(this.box[0], this.box[1], renderer);
+    renderable.renderOutline(this.box[0], this.box[1], renderer);
   }
 }

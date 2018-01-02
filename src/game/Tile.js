@@ -1,8 +1,8 @@
 import { Manager } from './Manager';
 
 export default class Tile {
-  constructor(sprite) {
-    this.sprite = sprite;
+  constructor(renderable) {
+    this.renderable = renderable;
   }
 
   render(instance, renderer, x, y) {
@@ -18,7 +18,7 @@ export default class Tile {
       y: (~-(sum / 4) + 1) * size,
     };
     
-    Manager.sprites[this.sprite].render(x*size, y*size, renderer, offset);
+    Manager.renderables[this.renderable].render(x*size, y*size, renderer, offset);
   }
 
   getSum(x, y, tiles) {
@@ -35,7 +35,7 @@ export default class Tile {
 
     scores.forEach(i => {
       let tile = this.tileExists(i[0], i[1], tiles);
-      sum += tile ? !!(tile.sprite === this.sprite)*i[2] : 0;
+      sum += tile ? !!(tile.renderable === this.renderable)*i[2] : 0;
     });
 
     return sum;

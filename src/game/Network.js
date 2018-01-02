@@ -17,7 +17,7 @@ export default class Network {
       let map = msg.map;
       for(let x in map) {
         for(let y in map[x]) {
-          instance.addTile(x, y, new Tile(map[x][y].sprite));
+          instance.addTile(x, y, new Tile(map[x][y].renderable));
         }
       }
     });

@@ -83,6 +83,10 @@ export default class Game {
       h: 16,
     });
 
+    Manager.addAnimation(['woodTiles', 'stoneTiles'], 'testAnimation', {
+
+    });
+
     // let loaded = localStorage.getItem('map');
     // try {
     //   loaded = JSON.parse(loaded);
@@ -103,7 +107,7 @@ export default class Game {
     //   }
     // }
 
-    this.instance.addEntity(new Entity([150, 150, 16, 16], 'testSprite'));
+    this.instance.addEntity(new Entity([150, 150, 16, 16], 'testAnimation'));
 
     // let add = (x, y, sprite) => Manager.addTile(x, y, new Tile(sprite));
     // window.add = add;

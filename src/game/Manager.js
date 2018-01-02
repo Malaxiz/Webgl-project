@@ -1,5 +1,6 @@
 import SpriteSheet from './SpriteSheet';
 import Sprite from './Sprite';
+import Animation from './Animation';
 
 import m4 from './m4';
 import webglUtils from './webgl-utils';
@@ -24,7 +25,7 @@ export default class AssetManager {
 
     this.programs = {};
     this.sheets = {};
-    this.sprites = {};
+    this.renderables = {};
     this.programs = {};
   }
 
@@ -34,8 +35,13 @@ export default class AssetManager {
   }
 
   addSprite(sheetid, spriteid, info) {
-    this.sprites[spriteid] = new Sprite(this.gl, this.sheets[sheetid], info);
-    return this.sprites[spriteid];
+    this.renderables[spriteid] = new Sprite(this.gl, this.sheets[sheetid], info);
+    return this.renderables[spriteid];
+  }
+
+  addAnimation(sprites, animationid, info) {
+    this.renderables[animationid] = new Animation(sprites, info);
+    return this.renderables[animationid];
   }
 
   init(gl) {

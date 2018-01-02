@@ -35,8 +35,9 @@ export default class Event {
       this.mousepos = [e.clientX - 5, e.clientY - 5];
     });
     addEventListener('wheel', e => {
-      let d = e.deltaY * 0.005;
+      let d = e.deltaY * 0.01;
       Manager.scale -= Manager.scale - d <= 0 ? 0 : d;
+      console.log(Manager.scale)
     });
   }
 
