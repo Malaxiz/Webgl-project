@@ -18,7 +18,7 @@ export default class Tile {
       y: (~-(sum / 4) + 1) * size,
     };
     
-    Manager.sprites[this.sprite].render(x*scale*size, y*scale*size, renderer, offset);
+    Manager.sprites[this.sprite].render(x*size, y*size, renderer, offset);
   }
 
   getSum(x, y, tiles) {

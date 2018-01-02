@@ -60,7 +60,7 @@ export default class Game {
     Manager.addSheet('TILES', 'tiles.png');
     Manager.addSprite('MAIN', 'testSprite', {
       x: 16,
-      y: 32,
+      y: 16*7,
     });
     Manager.addSprite('TILES', 'grassTiles', {
       x: 0,

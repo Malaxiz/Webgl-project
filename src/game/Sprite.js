@@ -27,6 +27,23 @@ export default class Sprite {
     let gl = this.gl;
     let program = Manager.programs[prog].program;
 
+    let realDims = {
+      srcWidth, srcHeight,
+      srcX, srcY,
+    };
+
+    if(prog === 'line') {
+      srcWidth += 2.0;
+      srcHeight += 2.0;
+      srcX -= 1.0;
+      srcY -= 1.0;
+
+      dstWidth += 2.0 * Manager.scale;
+      dstHeight += 2.0 * Manager.scale;
+      dstX -= Manager.scale;
+      dstY -= Manager.scale;
+    }
+
     if (dstX === undefined) {
       dstX = srcX;
       srcX = 0;
@@ -57,15 +74,15 @@ export default class Sprite {
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.useProgram(program);
 
-    let draw = Manager.programs[prog].info;
+    let info = Manager.programs[prog].info;
 
     // Setup the attributes to pull data from our buffers
-    gl.bindBuffer(gl.ARRAY_BUFFER, draw.positionBuffer);
-    gl.enableVertexAttribArray(draw.positionLocation);
-    gl.vertexAttribPointer(draw.positionLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, draw.texcoordBuffer);
-    gl.enableVertexAttribArray(draw.texcoordLocation);
-    gl.vertexAttribPointer(draw.texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, info.positionBuffer);
+    gl.enableVertexAttribArray(info.positionLocation);
+    gl.vertexAttribPointer(info.positionLocation, 2, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, info.texcoordBuffer);
+    gl.enableVertexAttribArray(info.texcoordLocation);
+    gl.vertexAttribPointer(info.texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 
     // this matirx will convert from pixels to clip space
     let matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
@@ -78,7 +95,7 @@ export default class Sprite {
     matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 
     // Set the matrix.
-    gl.uniformMatrix4fv(draw.matrixLocation, false, matrix);
+    gl.uniformMatrix4fv(info.matrixLocation, false, matrix);
 
     // just like a 2d projection matrix except in texture space (0 to 1)
     // instead of clip space. This matrix puts us in pixel space.
@@ -96,10 +113,15 @@ export default class Sprite {
     texMatrix = m4.scale(texMatrix, srcWidth, srcHeight, 1);
 
     // Set the texture matrix.
-    gl.uniformMatrix4fv(draw.textureMatrixLocation, false, texMatrix);
+    gl.uniformMatrix4fv(info.textureMatrixLocation, false, texMatrix);
 
     // Tell the shader to get the texture from texture unit 0
-    gl.uniform1i(draw.textureLocation, 0);
+    gl.uniform1i(info.textureLocation, 0);
+    gl.uniform1f(info.timeLocation, (Date.now() - Manager.startTime) / 1000.0);
+    gl.uniform2fv(info.stepLocation, [0.02 / srcWidth, 0.02 / srcHeight ]);
+    gl.uniform4fv(info.realDimsLocation, [realDims.srcX, realDims.srcY, realDims.srcWidth, realDims.srcHeight]);
+    gl.uniform2fv(info.texDimLocation, [texWidth, texHeight]);
+    // gl.uniform4fv(info.spriteLocation, [0.02 / srcWidth, 0.02 / srcHeight ]);
 
     // draw the quad (2 triangles, 6 vertices)
     gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -119,8 +141,11 @@ export default class Sprite {
     };
 
     let cam = renderer.camera.box;
-    let w = this.w * Manager.scale;
-    let h = this.h * Manager.scale;
+    let scale = Manager.scale;
+    x *= scale;
+    y *= scale;
+    let w = this.w * scale;
+    let h = this.h * scale;
     
     // if(!collision([x, y, w, h], [cam[0] + 200, cam[1] + 200, cam[2] - 400, cam[3] - 400])) return;
     if(!collision([x, y, w, h], cam)) return;

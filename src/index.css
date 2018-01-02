@@ -36,3 +36,9 @@ body {
 .noshow {
   display: none;
 }
+
+.person { /* define minority */
+  color: african-american;
+}
+
+

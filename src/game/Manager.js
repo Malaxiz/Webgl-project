@@ -13,6 +13,7 @@ import drawLineFrag from './shaders/draw-outline.frag';
 export default class AssetManager {
   constructor() {
     this.gl = undefined;
+    this.startTime = Date.now();
 
     try {
       this.loadContext = document.getElementById('temp');
@@ -54,8 +55,12 @@ export default class AssetManager {
 
     info.matrixLocation = gl.getUniformLocation(program, "u_matrix");
     info.timeLocation = gl.getUniformLocation(program, "time");
+    info.stepLocation = gl.getUniformLocation(program, "stepSize");
     info.textureMatrixLocation = gl.getUniformLocation(program, "u_textureMatrix");
     info.textureLocation = gl.getUniformLocation(program, "u_texture");
+    info.spriteLocation = gl.getUniformLocation(program, "sprite");
+    info.realDimsLocation = gl.getUniformLocation(program, "realDims");
+    info.texDimLocation = gl.getUniformLocation(program, "texDim");
 
     info.positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, info.positionBuffer);
