@@ -68,6 +68,7 @@ export default class AssetManager {
     info.realDimsLocation = gl.getUniformLocation(program, "realDims");
     info.texDimLocation = gl.getUniformLocation(program, "texDim");
     info.scaleLocation = gl.getUniformLocation(program, "scale");
+    info.outlineColorLocation = gl.getUniformLocation(program, 'outlineColor');
 
     info.positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, info.positionBuffer);

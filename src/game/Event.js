@@ -19,6 +19,7 @@ export default class Event {
 
   init() {
     document.getElementById('ctx').oncontextmenu = () => false;
+    let s = this.game.network.s;
 
     addEventListener('keydown', this.keydown);
     addEventListener('keyup', this.keyup);
@@ -37,7 +38,6 @@ export default class Event {
     addEventListener('wheel', e => {
       let d = e.deltaY * 0.01;
       Manager.scale -= Manager.scale - d <= 0 ? 0 : d;
-      console.log(Manager.scale)
     });
   }
 
@@ -100,16 +100,16 @@ export default class Event {
         x, y,
         type: this.brush
       });
-      // if(instance.tiles[xN] && instance.tiles[xN][yN]) return;
-      // instance.addTile(xN, yN, new Tile(this.brush));
     }
     
     if(this.mousedown[2]) {
-      // instance.removeTile(xN, yN);
       s.emit('tileRemove', {
         x, y
       });
     }
 
+    s.emit('torchMove', {
+      mousepos: [(this.mousepos[0] + camera[0]) / Manager.scale - 8.0, (this.mousepos[1] + camera[1]) / Manager.scale - 14.0],
+    });
   }
 }

@@ -25,11 +25,11 @@ export default class Game {
 
     this.setup();
 
-    let event = new Event(this);
-    this.event = event;
-
     let network = new Network(this);
     this.network = network;
+
+    let event = new Event(this);
+    this.event = event;
 
     let timestep = 1000.0 / 60.0;
 
@@ -59,10 +59,16 @@ export default class Game {
     Manager.addSheet('MAIN', 'sheet.png');
     Manager.addSheet('TILES', 'tiles.png');
     Manager.addSprite('MAIN', 'testSprite', {
-      x: 16,
-      y: 16*7,
-      w: 32,
-      h: 32,
+      x: 0,
+      y: 80,
+      w: 16,
+      h: 16,
+    });
+    Manager.addSprite('MAIN', 'testSprite2', {
+      x: 48,
+      y: 96,
+      w: 16,
+      h: 16,
     });
     Manager.addSprite('TILES', 'grassTiles', {
       x: 0,
@@ -83,8 +89,8 @@ export default class Game {
       h: 16,
     });
 
-    Manager.addAnimation(['woodTiles', 'stoneTiles'], 'testAnimation', {
-
+    Manager.addAnimation(['testSprite', 'testSprite2'], 'testAnimation', {
+      fps: 4
     });
 
     // let loaded = localStorage.getItem('map');
@@ -107,7 +113,7 @@ export default class Game {
     //   }
     // }
 
-    this.instance.addEntity(new Entity([150, 150, 16, 16], 'testAnimation'));
+    
 
     // let add = (x, y, sprite) => Manager.addTile(x, y, new Tile(sprite));
     // window.add = add;

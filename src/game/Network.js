@@ -2,6 +2,7 @@ import { Manager } from './Manager';
 import Tile from './Tile';
 
 import IO from 'socket.io-client';
+import Entity from './Entity';
 
 export default class Network {
   constructor(game) {
@@ -20,6 +21,13 @@ export default class Network {
           instance.addTile(x, y, new Tile(map[x][y].renderable));
         }
       }
+
+      let entities = msg.entities;
+      console.log(entities);
+      for(let i in entities) {
+        let entity = entities[i];
+        instance.addEntity(new Entity(entity.box, entity.renderable), i);
+      }
     });
 
     this.setup();
@@ -35,6 +43,16 @@ export default class Network {
       'tileRemove': msg => {
         instance.removeTile(msg.x, msg.y);
       },
+      'updateEntity': msg => {
+        if(!msg.entity) return;
+        instance.entities[msg.entityid].box = msg.entity.box;
+      },
+      'addEntity': msg => {
+        instance.addEntity(new Entity(msg.entity.box, msg.entity.renderable), msg.entityid);
+      },
+      'removeEntity': msg => {
+        instance.removeEntity(msg.entityid);
+      }
     };
 
     for(let i in events) {

@@ -1,5 +1,6 @@
 import Instance from './../game/Instance';
 import User from './User';
+import Entity from './../game/Entity';
 
 export default class ServerInstance {
   constructor(id) {
@@ -7,6 +8,8 @@ export default class ServerInstance {
 
     this.instance = new Instance();
     this.users = {};
+
+    // this.instance.addEntity(new Entity([150, 150, 16, 16], 'testAnimation'));
   }
 
   broadcast(type, msg, from) {
@@ -19,7 +22,19 @@ export default class ServerInstance {
 
   addUser(user) {
     user.instance = this;
-    this.users[user.s.id] = user;
+    this.users[user.s.id] = user;    
+
+    user.s.emit('welcome', {
+      map: this.instance.tiles,
+      entities: this.instance.entities
+    });
+
+    let torch = this.instance.addEntity(new Entity([150, 150, 16, 16], 'testAnimation'), `torch${user.s.id}`);
+
+    this.broadcast('addEntity', {
+      entity: torch,
+      entityid: `torch${user.s.id}`
+    });
   }
 
   update() {

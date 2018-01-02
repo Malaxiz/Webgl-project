@@ -8,7 +8,7 @@ export default class Animation {
     this.mod = 1000.0 / this.sprites.length;
 
     this.info = {
-      fps: (info.fps * 1/2 || 2 * 1/2),
+      fps: (info.fps || 2),
     };
 
     this.active = this.getSprite();
@@ -16,7 +16,7 @@ export default class Animation {
 
   getSprite() {
     let amount = this.sprites.length;
-    let ind = Math.floor(((Date.now() - this.start) * this.info.fps) % 1000.0 / 1000.0 * this.sprites.length);
+    let ind = Math.floor(((Date.now() - this.start) * this.info.fps / this.sprites.length) % 1000.0 / 1000.0 * this.sprites.length);
     return Manager.renderables[this.sprites[ind]];
   }
 

@@ -9,8 +9,12 @@ export default class Instance {
   }
 
   addEntity(entity, entityid) {
-    this.entities[entityid || this.entityid++] = entity;
+    this.entities[entityid || `auto${this.entityid++}`] = entity;
     return entity;
+  }
+
+  removeEntity(entityid) {
+    delete this.entities[entityid];
   }
 
   addTile(x, y, tile) {

@@ -41,13 +41,6 @@ export default class Server {
 
   newSocket(s) {
     console.log(`new connection: ${s.id}`);
-    s.on('disconnect', () => {
-      console.log('disconnect');
-    });
-
-    s.emit('welcome', {
-      map: this.instances['lobby'].instance.tiles
-    });
 
     let user = new User(this, s);
     this.users[s.id] = user;
