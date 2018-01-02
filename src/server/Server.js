@@ -12,9 +12,9 @@ export default class Server {
     this.instances['lobby'] = new ServerInstance('lobby');
 
     let range = (l,r) => new Array(r - l).fill().map((_,k) => k + l);
-    for(let y in range(0, 5)) {
-      for(let x in range(0, 10)) {
-        this.instances['lobby'].instance.addTile(x, y, new Tile('grassTiles'));
+    for(let y in range(0, 50)) {
+      for(let x in range(0, 100)) {
+        this.instances['lobby'].instance.addTile(x, y, new Tile(['grassTiles', 'stoneTiles', 'woodTiles'][Math.floor(Math.random() * 3)]));
       }
     }
 

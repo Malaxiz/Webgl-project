@@ -13,6 +13,9 @@ export default class Sprite {
     this.w = info.w || 16;
     this.h = info.h || 16;
     this.sheet = sheet;
+
+    this.matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
+    // this.texMatrix = m4.scaling(1 / this.sheet.info.w, 1 / this.sheet.info.h, 1);
   }
 
   render(x, y, renderer, offset={}) {
@@ -25,7 +28,8 @@ export default class Sprite {
 
   drawImage(prog, tex, texWidth, texHeight, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight, srcRotation) {
     let gl = this.gl;
-    let program = Manager.programs[prog].program;
+    let progref = Manager.programs[prog];
+    let program = progref.program;
 
     let realDims = {
       srcWidth, srcHeight,
@@ -74,9 +78,9 @@ export default class Sprite {
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.useProgram(program);
 
-    let info = Manager.programs[prog].info;
+    let info = progref.info;
 
-    // Setup the attributes to pull data from our buffers
+    // Setup the attributes to pull data from our buffers 
     gl.bindBuffer(gl.ARRAY_BUFFER, info.positionBuffer);
     gl.enableVertexAttribArray(info.positionLocation);
     gl.vertexAttribPointer(info.positionLocation, 2, gl.FLOAT, false, 0, 0);
@@ -85,6 +89,7 @@ export default class Sprite {
     gl.vertexAttribPointer(info.texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 
     // this matirx will convert from pixels to clip space
+    // let matrix = Object.assign({}, this.matrix);
     let matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
     // this matrix will translate our quad to dstX, dstY
@@ -99,7 +104,8 @@ export default class Sprite {
 
     // just like a 2d projection matrix except in texture space (0 to 1)
     // instead of clip space. This matrix puts us in pixel space.
-    let texMatrix = m4.scaling(1 / texWidth, 1 / texHeight, 1);
+    let texMatrix = m4.scaling(1 / texWidth, 1 / texHeight, 1)
+    // let texMatrix = Object.assign({}, this.texMatrix);
 
     // We need to pick a place to rotate around
     // We'll move to the middle, rotate, then move back
@@ -118,12 +124,14 @@ export default class Sprite {
     // Tell the shader to get the texture from texture unit 0
     gl.uniform1i(info.textureLocation, 0);
     gl.uniform1f(info.timeLocation, (Date.now() - Manager.startTime) / 1000.0);
-    gl.uniform2fv(info.stepLocation, [0.02 / srcWidth, 0.02 / srcHeight ]);
-    gl.uniform4fv(info.realDimsLocation, [realDims.srcX, realDims.srcY, realDims.srcWidth, realDims.srcHeight]);
-    gl.uniform2fv(info.texDimLocation, [texWidth, texHeight]);
-    gl.uniform1f(info.scaleLocation, Manager.scale);
-    gl.uniform3fv(info.outlineColorLocation, [1.0, 0.0, 0.0]);
-    // gl.uniform4fv(info.spriteLocation, [0.02 / srcWidth, 0.02 / srcHeight ]);
+
+    if(prog === 'line') {
+      gl.uniform2fv(info.stepLocation, [0.02 / srcWidth, 0.02 / srcHeight ]);
+      gl.uniform4fv(info.realDimsLocation, [realDims.srcX, realDims.srcY, realDims.srcWidth, realDims.srcHeight]);
+      gl.uniform2fv(info.texDimLocation, [texWidth, texHeight]);
+      gl.uniform1f(info.scaleLocation, Manager.scale);
+      gl.uniform3fv(info.outlineColorLocation, [1.0, 0.0, 0.0]);
+    }
 
     // draw the quad (2 triangles, 6 vertices)
     gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -157,6 +165,6 @@ export default class Sprite {
 
     this.drawImage(program, sheet.info.texture, sheet.info.w, sheet.info.h,
                    this.offX + (offset.x || 0), this.offY + (offset.y || 0), this.w + (offset.w || 0), this.h + (offset.h || 0),
-                   x, y, w, h);
+                   x, y, w, h, 0);
   }
 }

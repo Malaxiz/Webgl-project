@@ -18,12 +18,11 @@ export default class Network {
       let map = msg.map;
       for(let x in map) {
         for(let y in map[x]) {
-          instance.addTile(x, y, new Tile(map[x][y].renderable));
+          let tile = instance.addTile(Number(x), Number(y), new Tile(map[x][y].renderable));
         }
       }
 
       let entities = msg.entities;
-      console.log(entities);
       for(let i in entities) {
         let entity = entities[i];
         instance.addEntity(new Entity(entity.box, entity.renderable), i);
@@ -37,7 +36,7 @@ export default class Network {
     let instance = this.instance;
 
     let events = {
-      'tileAdd': msg => {
+      'tileAdd': msg => { 
         instance.addTile(msg.x, msg.y, new Tile(msg.type));
       },
       'tileRemove': msg => {

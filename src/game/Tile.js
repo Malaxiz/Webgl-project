@@ -3,6 +3,7 @@ import { Manager } from './Manager';
 export default class Tile {
   constructor(renderable) {
     this.renderable = renderable;
+    this.sum = 0;
   }
 
   render(instance, renderer, x, y) {
@@ -11,7 +12,8 @@ export default class Tile {
     let scale = Manager.scale;
 
     let tiles = instance.tiles;
-    let sum = this.getSum(x, y, tiles);
+    // let sum = this.getSum(x, y, tiles);
+    let sum = this.sum;
 
     let offset = {
       x: (sum % 4) * size,
@@ -19,6 +21,10 @@ export default class Tile {
     };
     
     Manager.renderables[this.renderable].render(x*size, y*size, renderer, offset);
+  }
+
+  updateSum(x, y, tiles) {
+    this.sum = this.getSum(x, y, tiles);
   }
 
   getSum(x, y, tiles) {

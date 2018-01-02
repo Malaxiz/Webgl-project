@@ -20,7 +20,7 @@ export default class AssetManager {
       this.loadContext = document.getElementById('temp');
     } catch(e) { }
 
-    this.scale = 2;
+    this.scale = 3;
     this.tileSize = 16;
 
     this.programs = {};

@@ -78,6 +78,9 @@ export default class Event {
       '3': () => {
         this.brush = 'stoneTiles';
       },
+      '4': () => {
+        this.brush = 'testAnimation';
+      },
     };
 
     for(let i in this.keysdown) {
