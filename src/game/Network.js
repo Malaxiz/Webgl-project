@@ -15,12 +15,17 @@ export default class Network {
     this.instance = instance;
 
     s.on('welcome', msg => {
+      instance.tiles = {};
+
       let map = msg.map;
       for(let x in map) {
         for(let y in map[x]) {
           let tile = instance.addTile(Number(x), Number(y), new Tile(map[x][y].renderable));
         }
       }
+
+      instance.entities = {};
+      this.game.renderer.camera.target = this.game.instance.addEntity(new Entity([0, 0, 0, 0]), 'mouse');
 
       let entities = msg.entities;
       for(let i in entities) {
@@ -44,7 +49,7 @@ export default class Network {
       },
       'updateEntity': msg => {
         if(!msg.entity) return;
-        instance.entities[msg.entityid].box = msg.entity.box;
+        instance.entities[msg.entityid].targetBox = msg.entity.box;
       },
       'addEntity': msg => {
         instance.addEntity(new Entity(msg.entity.box, msg.entity.renderable), msg.entityid);

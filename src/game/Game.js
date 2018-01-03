@@ -126,6 +126,6 @@ export default class Game {
     // let add = (x, y, sprite) => Manager.addTile(x, y, new Tile(sprite));
     // window.add = add;
 
-    this.renderer.camera.target = this.instance.addEntity(new Entity([0, 0, 0, 0]), 'mouse');
+    
   }
 }

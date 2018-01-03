@@ -7,7 +7,7 @@ export default class Movable {
     this.parent = parent;
   }
 
-  update(game) {
+  update(game, doEvent) {
     
   }
 }

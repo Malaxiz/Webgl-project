@@ -3,6 +3,7 @@ import { Manager } from './Manager';
 export default class Entity {
   constructor(box, renderable='') {
     this.box = box;
+    this.targetBox = box;
     this.renderable = renderable;
 
     this.components = {};
@@ -21,10 +22,36 @@ export default class Entity {
   }
 
   update(game) {
+    let doEvent = msg => {
+      game.network.s.emit('componentEvent', {
+        entityId: ''
+      });
+    };
+
     for(let i in this.components) {
       let component = this.components[i];
-      component.update && component.update(game);
+      component.update && component.update(game, doEvent);
     }
+
+    if(!this.targetBox || this.targetBox === this.box) return;
+    let target = this.targetBox;
+
+    for(let i in [0,1]) {
+      let d = ((~-(target[i] - this.box[i])) / 2);
+      if(d === 0) continue;
+      this.box[i] += (d < -1 || d > 1) ? Math.round(d) : (d < 0 ? -1 : 1);
+    }
+
+    // for(let i in [0,1]) {
+    //   let d = ((target[i] - this.box[i]) / 10);
+    //   if(d > -1 && d < 1) {
+    //     // this.box[i] = target[i];
+    //     this.box[i] += d;
+    //   } else 
+    //   {
+    //     this.box[i] += Math.round(d);
+    //   }
+    // }
   }
 
   render(renderer) {
