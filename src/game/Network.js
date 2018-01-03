@@ -51,6 +51,10 @@ export default class Network {
       },
       'removeEntity': msg => {
         instance.removeEntity(msg.entityid);
+      },
+      'entityEvent': msg => {
+        let entity = instance.entities[msg.entityid];
+        entity && entity.event(msg.event, this.game);
       }
     };
 

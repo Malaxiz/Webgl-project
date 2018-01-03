@@ -14,6 +14,7 @@ export default class Game {
 
   init(opts) {
     let canvas = document.getElementById('ctx');
+    let tcanvas = document.getElementById('tctx');
     let gl = canvas.getContext('webgl');
     this.gl = gl;
 
@@ -41,6 +42,12 @@ export default class Game {
 
       while(delta >= timestep) {
         event.update(instance);
+
+        for(let i in instance.entities) {
+          let entity = instance.entities[i];
+          entity.update(this);
+        }
+
         renderer.camera.update(instance);
         delta -= timestep;
       }
@@ -58,6 +65,7 @@ export default class Game {
     
     Manager.addSheet('MAIN', 'sheet.png');
     Manager.addSheet('TILES', 'tiles.png');
+    Manager.addSheet('CHARACTER', 'character.png');
     Manager.addSprite('MAIN', 'testSprite', {
       x: 0,
       y: 80,
