@@ -9,8 +9,8 @@ var io = require('socket.io')(http, {
   wsEngine: 'ws'
 });
 
-// const port = process.env.PORT || 7777;
-const port = 7777;
+const port = process.env.PORT || 7777;
+// const port = 7777;
 app.use('/assets', express.static(path.resolve('build/assets/')));
 
 let server = new Server();
