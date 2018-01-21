@@ -1,5 +1,5 @@
-import Entity from './Entity';
-import Manager from './Manager';
+import Entity from './../Entity';
+import { Manager } from './../Manager';
 
 export default class Player {
   constructor(parent) {

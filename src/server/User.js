@@ -12,7 +12,7 @@ export default class User {
   setup() {
     let events = {
       'disconnect': (msg, instance) => {
-        console.log('removeing', msg)
+        console.log('user disconnect')
         instance.instance.removeEntity(`torch${this.s.id}`);
         instance.broadcast('removeEntity', {
           entityid: `torch${this.s.id}`

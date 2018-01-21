@@ -126,7 +126,7 @@ export default class Sprite {
     gl.uniform1f(info.timeLocation, (Date.now() - Manager.startTime) / 1000.0);
 
     if(prog === 'line') {
-      gl.uniform2fv(info.stepLocation, [0.02 / srcWidth, 0.02 / srcHeight ]);
+      gl.uniform2fv(info.stepLocation, [0.0125 / srcWidth, 0.0125 / srcHeight ]);
       gl.uniform4fv(info.realDimsLocation, [realDims.srcX, realDims.srcY, realDims.srcWidth, realDims.srcHeight]);
       gl.uniform2fv(info.texDimLocation, [texWidth, texHeight]);
       gl.uniform1f(info.scaleLocation, Manager.scale);

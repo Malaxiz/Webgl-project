@@ -18,6 +18,8 @@ export default class Game {
     let gl = canvas.getContext('webgl');
     this.gl = gl;
 
+    console.log(Manager.componentTypes)
+
     let renderer = new Renderer(gl);
     this.renderer = renderer;
 
@@ -98,6 +100,19 @@ export default class Game {
     });
 
     Manager.addAnimation(['testSprite', 'testSprite2'], 'testAnimation', {
+      fps: 4
+    });
+
+    [0, 1, 2].map(i => {
+      Manager.addSprite('CHARACTER', `char${i}`, {
+        x: 16 * i,
+        y: 64,
+        w: 16,
+        h: 16
+      });
+    });
+    
+    Manager.addAnimation([1, 2].map(i => `char${i}`), 'testAnimation', {
       fps: 4
     });
 

@@ -5,6 +5,10 @@ import Animation from './Animation';
 import m4 from './m4';
 import webglUtils from './webgl-utils';
 
+import Living from './components/Living';
+import Movable from './components/Movable';
+import Player from './components/Player';
+
 import drawImageVert from './shaders/draw-image.vert';
 import drawImageFrag from './shaders/draw-image.frag';
 
@@ -26,7 +30,16 @@ export default class AssetManager {
     this.programs = {};
     this.sheets = {};
     this.renderables = {};
-    this.programs = {};
+
+    this.activeComponents = [
+      Living,
+      Movable,
+      Player,
+    ];
+    this.componentTypes = {};
+    for(let i in this.activeComponents) {
+      this.componentTypes[this.activeComponents[i].name] = this.activeComponents[i];
+    }
   }
 
   addSheet(sheetid, path) {

@@ -1,6 +1,6 @@
-import Entity from './Entity';
-import Sprite from './Sprite';
-import Manager from './Manager';
+import Entity from './../Entity';
+import Sprite from './../Sprite';
+import { Manager } from './../Manager';
 
 export default class Movable {
   constructor(parent) {

@@ -60,6 +60,31 @@ export default class Network {
       'entityEvent': msg => {
         let entity = instance.entities[msg.entityid];
         entity && entity.event(msg.event, this.game);
+      },
+
+      'entityUpdate': msg => {
+        let entityid = msg.entityid;
+        let entity = instance.entities[entityid];
+
+        let box = msg.box;
+        entity.targetBox = msg.box;
+
+        switch(msg.type) {
+          case 'addComponent':
+            // let componentType = msg.componentType;
+            // entity.components[componentType]
+            break;
+
+          case 'removeComponent':
+            
+            break;
+        }
+      },
+      'componentUpdate': msg => {
+        let entityid = msg.entityid;
+        let componentType = msg.componentType;
+
+        
       }
     };
 
