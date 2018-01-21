@@ -99,9 +99,9 @@ export default class Game {
       h: 16,
     });
 
-    Manager.addAnimation(['testSprite', 'testSprite2'], 'testAnimation', {
-      fps: 4
-    });
+    // Manager.addAnimation(['testSprite', 'testSprite2'], 'testAnimation', {
+    //   fps: 4
+    // });
 
     [0, 1, 2].map(i => {
       Manager.addSprite('CHARACTER', `char${i}`, {

@@ -71,19 +71,20 @@ export default class Network {
 
         switch(msg.type) {
           case 'addComponent':
-            // let componentType = msg.componentType;
-            // entity.components[componentType]
+            let componentType = Manager.componentTypes[msg.componentType];
+            entity.components[msg.componentType] = new componentType();
             break;
 
           case 'removeComponent':
-            
+            delete entity.components[msg.componentType];
             break;
         }
       },
       'componentUpdate': msg => {
         let entityid = msg.entityid;
-        let componentType = msg.componentType;
-
+        let componentType = Manager.componentTypes[msg.componentType];
+        let component = instance.entities[entityid].components[msg.componentType];
+        component.event(msg.content);
         
       }
     };
